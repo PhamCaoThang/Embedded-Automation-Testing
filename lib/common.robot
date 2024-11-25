@@ -20,3 +20,19 @@ Execute Command With SSH
     ${cmd}=  Evaluate  ${cmd}
     ${result}=  Execute Command  ${cmd}
     Close Connection
+
+Regexp Output
+    [Arguments]    ${output}    ${regex_pattern}    ${group}
+    
+    ${result}=  Get Regexp Matches  ${output}    ${regex_pattern}    ${group}
+    Log  ${result}
+
+Check Host Alive
+    [Arguments]    ${host_ip}
+
+Check Host Alive 
+    [Arguments]  ${host}
+    ${ping_result}=  Run Process  ping -c 1 ${host}  stderr=False  shell=True
+    ${rc}=  Set Variable  ${ping_result.rc} 
+    Run Keyword If '${rc}' == '0' Log  Host still alive 
+    ...  ELSE  Log   Host die
