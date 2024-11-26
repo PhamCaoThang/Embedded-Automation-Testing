@@ -1,0 +1,32 @@
+
+********** Install jenkins steps **********
+****          Author : Win Pi          ****
+*******************************************
+
+1/ Prefer this page to get jenkins package : https://pkg.origin.jenkins.io/debian-stable/ 
+   ... and https://www.digitalocean.com/community/tutorials/how-to-install-jenkins-on-ubuntu-22-04
+
+    Execute these below commands on Execute machine (Ubuntu)
+    # Install jenkins commands
+
+    $ wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key |sudo gpg --dearmor -o /usr/share/keyrings/jenkins.gpg
+    $ sudo sh -c 'echo deb [signed-by=/usr/share/keyrings/jenkins.gpg] http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+    $ sudo apt update
+    $ sudo apt-get install fontconfig openjdk-17-jre
+    $ sudo apt install jenkins
+
+    # Start jenkins service
+    $ sudo systemctl start jenkins.service
+    $ sudo systemctl status jenkins
+
+    # Open the firewall
+    $ sudo ufw allow 8080
+    $ sudo ufw allow OpenSSH
+    $ sudo ufw enable
+    $ sudo ufw status # port 8080 in allow status
+
+2/ Besides, on your PC -> setup jenkins web UI
+    - Open the browser and access this link : http://your_server_ip_or_domain:8080 (your_server_ip_or_domain is Ubuntu ip)
+    - Execute this command to see init Jenkins password
+        $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+    - Continue setup your jenkins web UI.
