@@ -1,0 +1,7 @@
+1/ Create simple job
+    Dashboard -> New Item -> Freestyle and fill your job name -> OK
+    Go to Configure of your job -> Add build step -> Execute shell
+    Execute some Linux command 
+    Monitor output of your job
+
+2/ Create job to run Robot framework source code located on your server
