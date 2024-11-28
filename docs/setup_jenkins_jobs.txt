@@ -5,3 +5,6 @@
     Monitor output of your job
 
 2/ Create job to run Robot framework source code located on your server
+    - How to create Jenkins node to execute Robot framework?
+    - Install Jenkins plugin on Jenkins?
+    - Pipeline to run Robot framework test cases?
