@@ -6,5 +6,10 @@
 
 2/ Create job to run Robot framework source code located on your server
     - How to create Jenkins node to execute Robot framework?
+        Prefer this guideline to create an new agent : https://www.youtube.com/watch?v=99DddJiH7lM&t=1s
+    
     - Install Jenkins plugin on Jenkins?
+        Dashboard -> Plugin -> Robot framework plugin
+        Recheck Robot framework installed : -> Installed plugin and search Robot framework
+        
     - Pipeline to run Robot framework test cases?
