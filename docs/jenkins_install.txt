@@ -30,3 +30,5 @@
     - Execute this command to see init Jenkins password
         $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
     - Continue setup your jenkins web UI.
+    - Install Robot framework on your jenkins slave
+    - We can run robot command on this node.
