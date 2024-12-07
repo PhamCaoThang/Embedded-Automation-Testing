@@ -8,8 +8,47 @@
     - How to create Jenkins node to execute Robot framework?
         Prefer this guideline to create an new agent : https://www.youtube.com/watch?v=99DddJiH7lM&t=1s
     
-    - Install Jenkins plugin on Jenkins?
+    - Install Jenkins plugin on Jenkins
         Dashboard -> Plugin -> Robot framework plugin
         Recheck Robot framework installed : -> Installed plugin and search Robot framework
         
-    - Pipeline to run Robot framework test cases?
+    - Pipeline to run Robot framework test cases
+    - Setup Pipeline job to run test case
+
+        pipeline {
+            agent { label 'agent1' }
+
+            stages {
+                stage('Hello') {
+                    steps {
+                        sh '''
+                            # cd your Robot framework project
+                            cd ${your_project_path}
+                            # Check tool and create vir-environment to install Robot Framework
+                            python3 --version 
+                            pip3 --version
+                            pipx --version
+                            python3 -m venv ~/myenv
+                            . ~/myenv/bin/activate
+                            pipx install --force robotframework
+                            # Execute your test cases
+                            robot --outputdir ./${your_project_path}/output .${your_project_path}/Helloworld.robot
+                        '''
+                    }
+                }
+                # This stage to setup public html report
+                stage('Publish HTML Report') {
+                    steps {
+                        publishHTML(target: [ 
+                            allowMissing: false, 
+                            alwaysLinkToLastBuild: true, 
+                            keepAll: true, 
+                            reportDir: '${your_project_path}/output', 
+                            reportFiles: 'report.html, log.html', 
+                            reportName: 'Robot Framework Report', 
+                            wrapper: '<iframe sandbox="allow-scripts allow-same-origin" src="report.html"></iframe>'
+                        ]) 
+                    } 
+                }
+            }
+        }
