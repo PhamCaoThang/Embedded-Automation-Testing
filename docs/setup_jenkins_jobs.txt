@@ -52,3 +52,8 @@
                 }
             }
         }
+    - One more, some times you will got the issue that can't open the .html report files.
+    This issue : Blocked script execution in 'dashboard.html' because the document's frame is sandboxed and the 'allow-scripts' permission is not set.
+    You need to do something to read the html report files : 
+    Manage Jenkins ->  Script Console -> System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "") -> Run script -> Reload .html file
+    But once jenkins restart you need to implement this solution again to avoid this issue.
