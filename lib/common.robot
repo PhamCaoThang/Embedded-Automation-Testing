@@ -2,7 +2,7 @@
 Library           SSHLibrary
 
 *** Variables ***
-*** Key words ***
+*** Keywords ***
 SSH Hardware Device
     [Arguments]    ${ip_address}    ${user_name}    ${pass_word}
     
@@ -14,8 +14,8 @@ SSH Hardware Device
     Log  ${os_check}
 
 Execute Command With SSH
-    [Arguments]    ${cmd}
-    
+    [Arguments]    ${ip_address}    ${user_name}    ${pass_word}  ${cmd}
+    SSH Hardware Device  ${ip_address}    ${user_name}    ${pass_word}
     #Execute your command
     ${cmd}=  Evaluate  ${cmd}
     ${result}=  Execute Command  ${cmd}
@@ -26,9 +26,6 @@ Regexp Output
     
     ${result}=  Get Regexp Matches  ${output}    ${regex_pattern}    ${group}
     Log  ${result}
-
-Check Host Alive
-    [Arguments]    ${host_ip}
 
 Check Host Alive 
     [Arguments]  ${host}
