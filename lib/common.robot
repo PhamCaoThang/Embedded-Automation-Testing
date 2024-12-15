@@ -1,5 +1,6 @@
 *** Settings ***
 Library           SSHLibrary
+Library           String
 
 *** Variables ***
 *** Keywords ***
@@ -9,23 +10,23 @@ SSH Hardware Device
     Open Connection  ${ip_address}
     Login  ${user_name}    ${pass_word}
     Log  SSH Hardware Success
-    #Run a example command
-    ${os_check}=  Execute Command    cat /etc/os-release
-    Log  ${os_check}
 
 Execute Command With SSH
     [Arguments]    ${ip_address}    ${user_name}    ${pass_word}  ${cmd}
     SSH Hardware Device  ${ip_address}    ${user_name}    ${pass_word}
     #Execute your command
-    ${cmd}=  Evaluate  ${cmd}
+    #${cmd}=  Evaluate  ${cmd}
     ${result}=  Execute Command  ${cmd}
     Close Connection
+
+    [Return]  ${result}
 
 Regexp Output
     [Arguments]    ${output}    ${regex_pattern}    ${group}
     
     ${result}=  Get Regexp Matches  ${output}    ${regex_pattern}    ${group}
-    Log  ${result}
+    
+    [Return]  ${result}
 
 Check Host Alive 
     [Arguments]  ${host}
