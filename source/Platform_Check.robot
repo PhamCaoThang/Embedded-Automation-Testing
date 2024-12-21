@@ -1,10 +1,14 @@
+######################################################
+###                Author : WinPi                  ###
+###              Release day : 12/21/2024          ###
+######################################################
 *** Settings ***
 Library           SSHLibrary
 Resource          ../lib/common.robot
 *** Variables ***
-${HOST}           192.168.2.122
-${USERNAME}       betram
-${PASSWORD}       beaker
+${HOST}           your_ip
+${USERNAME}       your_name
+${PASSWORD}       your_password
 
 *** Test Cases ***
 Platform Check For Raspberry Board

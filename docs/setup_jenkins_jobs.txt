@@ -1,3 +1,7 @@
+********** Install jenkins steps **********
+****          Author : Win Pi          ****
+*******************************************
+
 1/ Create simple job
     Dashboard -> New Item -> Freestyle and fill your job name -> OK
     Go to Configure of your job -> Add build step -> Execute shell
@@ -15,43 +19,78 @@
     - Pipeline to run Robot framework test cases
     - Setup Pipeline job to run test case
 
-        pipeline {
-            agent { label 'agent1' }
-
-            stages {
-                stage('Hello') {
-                    steps {
-                        sh '''
-                            # cd your Robot framework project
-                            cd ${your_project_path}
-                            # Check tool and create vir-environment to install Robot Framework
-                            python3 --version 
-                            pip3 --version
-                            pipx --version
-                            python3 -m venv ~/myenv
-                            . ~/myenv/bin/activate
-                            pipx install --force robotframework
-                            # Execute your test cases
-                            robot --outputdir ./${your_project_path}/output .${your_project_path}/Helloworld.robot
-                        '''
-                    }
-                }
-                # This stage to setup public html report
-                stage('Publish HTML Report') {
-                    steps {
-                        publishHTML(target: [ 
-                            allowMissing: false, 
-                            alwaysLinkToLastBuild: true, 
-                            keepAll: true, 
-                            reportDir: '${your_project_path}/output', 
-                            reportFiles: 'report.html, log.html', 
-                            reportName: 'Robot Framework Report', 
-                            wrapper: '<iframe sandbox="allow-scripts allow-same-origin" src="report.html"></iframe>'
-                        ]) 
-                    } 
-                }
+    pipeline {
+    agent { label 'agent1' }
+    
+    parameters {
+        string defaultValue: 'raspberry_raspbian', description: 'This is the configuration file paramenters', name: 'config', trim : true
+        string defaultValue: 'Platform_Check.robot', description: 'This is the test case name', name: 'testcase', trim : true
+    }
+    
+    environment { 
+        CONFIG_PATH = "./config/${params.config}.json"
+        TESCASE_NAME= "./source/${params.testcase}.robot"
+    }
+    
+    stages {
+        stage('First setup And Execute Robot Framework Test case') {
+            steps {
+                sh '''
+                    pwd
+                    cp -r /home/winpi/rf_testcases ./
+                    cd /home/winpi/jenkins/workspace/Test_Pipeline/rf_testcases
+                    pwd
+                    ls -lh
+                    python3 --version 
+                    pip3 --version
+                    pipx --version
+                    python3 -m venv ~/myenv
+                    . ~/myenv/bin/activate
+                    pipx install --force robotframework
+                    pip install --force robotframework-sshlibrary
+                    robot --variablefile ${CONFIG_PATH} --outputdir ./output ${TESCASE_NAME}
+                '''
             }
         }
+        
+        stage('Publish HTML Report') { 
+            steps { 
+                publishHTML(
+                    target: [ 
+                        allowMissing: false, 
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true, 
+                        reportDir: 'rf_testcases/output', 
+                        reportFiles: 'report.html, log.html', 
+                        reportName: 'Robot Framework Report', 
+                        wrapper: '<iframe sandbox="allow-scripts allow-same-origin" src="report.html"></iframe>' 
+                        ]) 
+            } 
+        }
+            
+        stage('Publish Robot Framework Results') {
+            steps {
+                echo 'Testing...'
+                script {
+                    step(
+                        [
+                          $class                    : 'RobotPublisher',
+                          outputPath                : 'rf_testcases/output',
+                          outputFileName            : "*.xml",
+                          reportFileName            : "report.html",
+                          logFileName               : "log.html",
+                          disableArchiveOutput      : false,
+                          passThreshold             : 100,
+                          unstableThreshold         : 95.0,
+                          otherFiles                : "*.png"
+                        ]
+                    )
+                }  
+            }
+        }
+    }
+}
+
     - One more, some times you will got the issue that can't open the .html report files.
     This issue : Blocked script execution in 'dashboard.html' because the document's frame is sandboxed and the 'allow-scripts' permission is not set.
     You need to do something to read the html report files : 

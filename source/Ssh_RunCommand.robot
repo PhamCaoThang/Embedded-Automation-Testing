@@ -1,3 +1,8 @@
+######################################################
+###                Author : WinPi                  ###
+###              Release day : 12/21/2024          ###
+######################################################
+
 *** Settings ***
 Library           SSHLibrary
 
@@ -18,3 +23,5 @@ SSH and Echo Command
     Log                ${output}
     Log                ${os_check}
     Close Connection
+robot --variablefile ./config/${params.config} --outputdir ./output ./source/Ssh_RunCommand.robot
+robot --variablefile ./config/raspberry_raspbian.json --outputdir ./output ./source/Ssh_RunCommand.robot

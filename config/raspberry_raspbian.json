@@ -1,0 +1,6 @@
+{
+    "HOST": "192.168.2.xxx",
+    "USERNAME": "yourname",
+    "PASSWORD": "yourpass",
+    "OS_VERSION" : "Raspbian 12"
+}
